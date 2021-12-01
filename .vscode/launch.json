@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "ChatClient",
             "projectName": "aloha-chat_17715af",
-            "args": "localhost 3000"
+            "args": "localhost 3001"
         },
         {
             "type": "java",
@@ -24,7 +24,7 @@
             "request": "launch",
             "mainClass": "ChatServer",
             "projectName": "aloha-chat_17715af",
-            "args": "3000"
+            "args": "3001"
         }
     ]
 }
