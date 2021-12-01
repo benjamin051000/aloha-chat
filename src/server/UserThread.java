@@ -1,3 +1,4 @@
+package server;
 // package net.codejava.networking.chat.server;
  
 import java.io.*;

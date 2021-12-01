@@ -14,7 +14,7 @@
             "type": "java",
             "name": "ChatClient",
             "request": "launch",
-            "mainClass": "ChatClient",
+            "mainClass": "client.ChatClient",
             "projectName": "aloha-chat_17715af",
             "args": "localhost 3001"
         },
@@ -22,7 +22,7 @@
             "type": "java",
             "name": "ChatServer",
             "request": "launch",
-            "mainClass": "ChatServer",
+            "mainClass": "server.ChatServer",
             "projectName": "aloha-chat_17715af",
             "args": "3001"
         }
