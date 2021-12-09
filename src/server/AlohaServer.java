@@ -75,9 +75,12 @@ public class AlohaServer
     }
 
     //new user
-    void addUserName(String userName) 
+    void add_username(AlohaUser user) 
     {
-        userNames.add(userName);
+        userNames.add(user.username);
+        // Broadcast to everyone that a new user has connected
+        final String msg = user.username + " joined.";
+        broadcast(msg, user);
     }
 
     boolean has_users_online() 

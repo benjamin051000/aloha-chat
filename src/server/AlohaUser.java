@@ -3,17 +3,17 @@
     John Shoemaker
     Benjamin Wheeler
 */
+
 package server; 
-
-import java.io.*;
 import java.net.Socket;
-
+import java.io.*;
 
 public class AlohaUser extends Thread 
 {
     private Socket socket;
     private AlohaServer server;
     private PrintWriter writer;
+    public String username;
  
     public AlohaUser(Socket socket_, AlohaServer server_) 
     {
@@ -32,32 +32,31 @@ public class AlohaUser extends Thread
             writer = new PrintWriter(output, true);
  
             if (server.has_users_online()) 
-            {
                 writer.println("Connected users: " + server.getUserNames());
-            } else {
+            else 
                 writer.println("No other users connected");
-            }
  
-            String userName = reader.readLine();
-            server.addUserName(userName);
+            username = reader.readLine();
+            server.add_username(this);
  
-            String serverMessage = "New user connected: " + userName;
-            server.broadcast(serverMessage, this);
+            String serverMessage;
+            // String serverMessage = "New user connected: " + username;
+            // server.broadcast(this);
  
             String clientMessage;
  
             do 
             {
                 clientMessage = reader.readLine();
-                serverMessage = "[" + userName + "]: " + clientMessage;
+                serverMessage = "[" + username + "]: " + clientMessage;
                 server.broadcast(serverMessage, this);
  
             } while (!clientMessage.equals("bye"));
  
-            server.removeUser(userName, this);
+            server.removeUser(username, this);
             socket.close();
  
-            serverMessage = userName + " has quit.";
+            serverMessage = username + " has quit.";
             server.broadcast(serverMessage, this);
  
         } catch (IOException ex) 
