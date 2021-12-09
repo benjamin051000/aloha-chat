@@ -1,24 +1,16 @@
 package server;
-// package net.codejava.networking.chat.server;
  
 import java.io.*;
-import java.net.*;
-// import java.util.*;
+import java.net.Socket;
  
-/**
- * This thread handles connection for each connected client, so the server
- * can handle multiple clients at the same time.
- *
- * @author www.codejava.net
- */
-public class User extends Thread {
+public class AlohaUser extends Thread {
     private Socket socket;
     private AlohaServer server;
     private PrintWriter writer;
  
-    public User(Socket socket, AlohaServer server) {
-        this.socket = socket;
-        this.server = server;
+    public AlohaUser(Socket socket_, AlohaServer server_) {
+        socket = socket_;
+        server = server_;
     }
  
     public void run() {
