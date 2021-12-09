@@ -12,10 +12,6 @@ import java.io.*;
  
 public class AlohaClient 
 {
-    private String hostname;
-    private int port;
-    private String userName;
- 
     public AlohaClient(String hostname, int port) 
     {
         this.hostname = hostname;
@@ -63,4 +59,8 @@ public class AlohaClient
         AlohaClient client = new AlohaClient(hostname, port);
         client.execute();
     }
+
+    private String hostname;
+    private int port;
+    private String userName;
 }

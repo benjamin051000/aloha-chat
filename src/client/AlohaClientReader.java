@@ -6,29 +6,23 @@
 
 package client;
 // package net.codejava.networking.chat.client;
- 
 import java.io.*;
 import java.net.*;
  
 public class AlohaClientReader extends Thread 
 {
-    private BufferedReader reader;
-    private Socket socket;
-    private AlohaClient client;
- 
-    public AlohaClientReader(Socket socket, AlohaClient client) 
+    public AlohaClientReader(Socket socketObj, AlohaClient clientAloha) 
     {
-        this.socket = socket;
-        this.client = client;
+        this.socketObj = socketObj;
+        this.clientAloha = clientAloha;
  
         try 
         {
-            InputStream input = socket.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(input));
+            InputStream input = socketObj.getInputStream();
+            readerBuffer = new BufferedReader(new InputStreamReader(input));
         } catch (IOException ex) 
         {
-            System.out.println("Error getting input stream: " + ex.getMessage());
-            ex.printStackTrace();
+            System.out.println("Error with reading...");
         }
     }
  
@@ -38,20 +32,23 @@ public class AlohaClientReader extends Thread
         {
             try 
             {
-                String response = reader.readLine();
+                String response = readerBuffer.readLine();
                 System.out.println("\n" + response);
  
                 // prints the username after displaying the server's message
-                if (client.getUserName() != null) 
+                if (clientAloha.getUserName() != null) 
                 {
-                    System.out.print("[" + client.getUserName() + "]: ");
+                    System.out.print("~" + clientAloha.getUserName() + ": ");
                 }
             } catch (IOException ex) 
             {
-                System.out.println("Error reading from server: " + ex.getMessage());
-                ex.printStackTrace();
+                System.out.println("Connection terminated... goodbye!");
                 break;
             }
         }
     }
+
+    private Socket socketObj;
+    private AlohaClient clientAloha;
+    private BufferedReader readerBuffer;
 }

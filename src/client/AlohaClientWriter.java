@@ -6,29 +6,23 @@
 
 package client;
 // package net.codejava.networking.chat.client;
- 
 import java.io.*;
 import java.net.*;
  
 public class AlohaClientWriter extends Thread 
 {
-    private PrintWriter writer;
-    private Socket socket;
-    private AlohaClient client;
- 
-    public AlohaClientWriter(Socket socket, AlohaClient client) 
+    public AlohaClientWriter(Socket socketObj, AlohaClient clientAloha) 
     {
-        this.socket = socket;
-        this.client = client;
+        this.clientAloha = clientAloha;
+        this.socketObj = socketObj;
  
         try 
         {
-            OutputStream output = socket.getOutputStream();
-            writer = new PrintWriter(output, true);
+            OutputStream output = socketObj.getOutputStream();
+            writerPrinter = new PrintWriter(output, true);
         } catch (IOException ex) 
         {
-            System.out.println("Error getting output stream: " + ex.getMessage());
-            ex.printStackTrace();
+            System.out.println("Error writing...");
         }
     }
  
@@ -37,26 +31,30 @@ public class AlohaClientWriter extends Thread
  
         Console console = System.console();
  
-        String userName = console.readLine("\nEnter your name: ");
-        client.setUserName(userName);
-        writer.println(userName);
+        String userName = console.readLine("\nAloha! Your name?: ");
+        clientAloha.setUserName(userName);
+        writerPrinter.println(userName);
  
         String text;
  
         do 
         {
-            text = console.readLine("[" + userName + "]: ");
-            writer.println(text);
+            text = console.readLine("~" + userName + ": ");
+            writerPrinter.println(text);
  
-        } while (!text.equals("bye"));
+        } while (!text.equals("aloha"));
  
         try 
         {
-            socket.close();
+            socketObj.close();
         } catch (IOException ex) 
         {
  
             System.out.println("Error writing to server: " + ex.getMessage());
         }
     }
+
+    private Socket socketObj;
+    private AlohaClient clientAloha;
+    private PrintWriter writerPrinter;
 }
