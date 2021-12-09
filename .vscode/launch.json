@@ -12,19 +12,18 @@
         },
         {
             "type": "java",
-            "name": "ChatClient",
+            "name": "Client",
             "request": "launch",
-            "mainClass": "client.ChatClient",
+            "mainClass": "client.AlohaClient",
             "projectName": "aloha-chat_17715af",
             "args": "localhost 3001"
         },
         {
             "type": "java",
-            "name": "ChatServer",
+            "name": "Server",
             "request": "launch",
-            "mainClass": "server.ChatServer",
+            "mainClass": "server.AlohaServer",
             "projectName": "aloha-chat_17715af",
-            "args": "3001"
         }
     ]
 }

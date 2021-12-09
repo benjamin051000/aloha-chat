@@ -1,27 +1,42 @@
-package server;
- 
+/*
+    Aloha! Chat Service
+    John Shoemaker
+    Benjamin Wheeler
+*/
+package server; 
+
 import java.io.*;
 import java.net.Socket;
- 
-public class AlohaUser extends Thread {
+
+
+public class AlohaUser extends Thread 
+{
     private Socket socket;
     private AlohaServer server;
     private PrintWriter writer;
  
-    public AlohaUser(Socket socket_, AlohaServer server_) {
+    public AlohaUser(Socket socket_, AlohaServer server_) 
+    {
         socket = socket_;
         server = server_;
     }
  
-    public void run() {
-        try {
+    public void run() 
+    {
+        try 
+        {
             InputStream input = socket.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
  
             OutputStream output = socket.getOutputStream();
             writer = new PrintWriter(output, true);
  
-            printUsers();
+            if (server.has_users_online()) 
+            {
+                writer.println("Connected users: " + server.getUserNames());
+            } else {
+                writer.println("No other users connected");
+            }
  
             String userName = reader.readLine();
             server.addUserName(userName);
@@ -31,7 +46,8 @@ public class AlohaUser extends Thread {
  
             String clientMessage;
  
-            do {
+            do 
+            {
                 clientMessage = reader.readLine();
                 serverMessage = "[" + userName + "]: " + clientMessage;
                 server.broadcast(serverMessage, this);
@@ -44,27 +60,16 @@ public class AlohaUser extends Thread {
             serverMessage = userName + " has quit.";
             server.broadcast(serverMessage, this);
  
-        } catch (IOException ex) {
+        } catch (IOException ex) 
+        {
             System.out.println("Error in UserThread: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
- 
-    /**
-     * Sends a list of online users to the newly connected user.
-     */
-    void printUsers() {
-        if (server.hasUsers()) {
-            writer.println("Connected users: " + server.getUserNames());
-        } else {
-            writer.println("No other users connected");
-        }
-    }
- 
-    /**
-     * Sends a message to the client.
-     */
-    void sendMessage(String message) {
+
+    void sendMessage(String message) 
+    {
         writer.println(message);
     }
+ 
 }
