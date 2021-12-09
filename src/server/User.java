@@ -11,12 +11,12 @@ import java.net.*;
  *
  * @author www.codejava.net
  */
-public class UserThread extends Thread {
+public class User extends Thread {
     private Socket socket;
-    private ChatServer server;
+    private AlohaServer server;
     private PrintWriter writer;
  
-    public UserThread(Socket socket, ChatServer server) {
+    public User(Socket socket, AlohaServer server) {
         this.socket = socket;
         this.server = server;
     }

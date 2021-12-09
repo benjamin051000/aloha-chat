@@ -3,7 +3,7 @@ package server;
  
 import java.io.*;
 import java.net.*;
-import java.util.*;
+import java.util.ArrayList;
  
 /**
  * This is the chat server program.
@@ -11,25 +11,28 @@ import java.util.*;
  *
  * @author www.codejava.net
  */
-public class ChatServer {
+public class AlohaServer {
     private int port;
-    private Set<String> userNames = new HashSet<>();
-    private Set<UserThread> userThreads = new HashSet<>();
+    private ArrayList<String> userNames = new ArrayList<>();
+    private ArrayList<User> userThreads = new ArrayList<>();
  
-    public ChatServer(int port) {
-        this.port = port;
+    public AlohaServer(int port_) {
+        port = port_;
     }
  
-    public void execute() {
+    /**
+     * Runs the server.
+     */
+    public void run() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
  
-            System.out.println("Chat Server is listening on port " + port);
+            System.out.println("Server listening on port " + port);
  
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("New user connected");
  
-                UserThread newUser = new UserThread(socket, this);
+                User newUser = new User(socket, this);
                 userThreads.add(newUser);
                 newUser.start();
  
@@ -42,22 +45,15 @@ public class ChatServer {
     }
  
     public static void main(String[] args) {
-        if (args.length < 1) {
-            System.out.println("Syntax: java ChatServer <port-number>");
-            System.exit(0);
-        }
- 
-        int port = Integer.parseInt(args[0]);
- 
-        ChatServer server = new ChatServer(port);
-        server.execute();
+        AlohaServer server = new AlohaServer(3001);
+        server.run();
     }
  
     /**
      * Delivers a message from one user to others (broadcasting)
      */
-    void broadcast(String message, UserThread excludeUser) {
-        for (UserThread aUser : userThreads) {
+    void broadcast(String message, User excludeUser) {
+        for (User aUser : userThreads) {
             if (aUser != excludeUser) {
                 aUser.sendMessage(message);
             }
@@ -74,7 +70,7 @@ public class ChatServer {
     /**
      * When a client is disconneted, removes the associated username and UserThread
      */
-    void removeUser(String userName, UserThread aUser) {
+    void removeUser(String userName, User aUser) {
         boolean removed = userNames.remove(userName);
         if (removed) {
             userThreads.remove(aUser);
