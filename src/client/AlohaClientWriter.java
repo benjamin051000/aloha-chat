@@ -6,6 +6,7 @@
 
 package client;
 // package net.codejava.networking.chat.client;
+import static java.lang.System.out;
 import java.io.*;
 import java.net.*;
  
@@ -22,7 +23,7 @@ public class AlohaClientWriter extends Thread
             writerPrinter = new PrintWriter(output, true);
         } catch (IOException ex) 
         {
-            System.out.println("Error writing...");
+            out.println("Error writing...");
         }
     }
  
@@ -50,7 +51,7 @@ public class AlohaClientWriter extends Thread
         } catch (IOException ex) 
         {
  
-            System.out.println("Error writing to server: " + ex.getMessage());
+            out.println("Error writing to server: " + ex.getMessage());
         }
     }
 

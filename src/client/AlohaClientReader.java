@@ -5,6 +5,7 @@
 */
 
 package client;
+import static java.lang.System.out;
 // package net.codejava.networking.chat.client;
 import java.io.*;
 import java.net.*;
@@ -22,7 +23,7 @@ public class AlohaClientReader extends Thread
             readerBuffer = new BufferedReader(new InputStreamReader(input));
         } catch (IOException ex) 
         {
-            System.out.println("Error with reading...");
+            out.println("Error with reading...");
         }
     }
  
@@ -33,16 +34,16 @@ public class AlohaClientReader extends Thread
             try 
             {
                 String response = readerBuffer.readLine();
-                System.out.println("\n" + response);
+                out.println("\n" + response);
  
                 // prints the username after displaying the server's message
                 if (clientAloha.getUserName() != null) 
                 {
-                    System.out.print("~" + clientAloha.getUserName() + ": ");
+                    out.print("~" + clientAloha.getUserName() + ": ");
                 }
             } catch (IOException ex) 
             {
-                System.out.println("Connection terminated... goodbye!");
+                out.println("Connection terminated... goodbye!");
                 break;
             }
         }

@@ -7,6 +7,7 @@
 package client;
 // package net.codejava.networking.chat.client;
  
+import static java.lang.System.out;
 import java.net.*;
 import java.io.*;
  
@@ -24,17 +25,17 @@ public class AlohaClient
         {
             Socket socket = new Socket(hostname, port);
  
-            System.out.println("Connected to the chat server");
+            out.println("Connected to the chat server");
  
             new AlohaClientReader(socket, this).start();
             new AlohaClientWriter(socket, this).start();
  
         } catch (UnknownHostException ex) 
         {
-            System.out.println("Server not found: " + ex.getMessage());
+            out.println("Server not found: " + ex.getMessage());
         } catch (IOException ex) 
         {
-            System.out.println("I/O Error: " + ex.getMessage());
+            out.println("I/O Error: " + ex.getMessage());
         }
  
     }

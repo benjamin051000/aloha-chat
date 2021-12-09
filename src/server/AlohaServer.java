@@ -5,10 +5,10 @@
 */
 package server;
 
+import static java.lang.System.out;
 import java.io.IOException; // For socket errors
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import java.util.ArrayList;
 
 
@@ -27,7 +27,7 @@ public class AlohaServer
         try (ServerSocket serverSocket = new ServerSocket(port)) 
         {
  
-            System.out.println("Server listening on port " + port);
+            out.println("Server listening on port " + port);
  
             while (true) 
             {
@@ -35,7 +35,7 @@ public class AlohaServer
                 // (func blocks until connection made)
                 Socket s = serverSocket.accept();
 
-                System.out.println("New client connected");
+                out.println("New client connected");
                 
                 // Create a new thread that represents this client
                 var user = new AlohaUser(s, this);
@@ -91,7 +91,7 @@ public class AlohaServer
     {
         userthreads.remove(user);
         usernames.remove(user.username);
-        System.out.println(user.username + " has left the AlohaChat");
+        out.println(user.username + " has left the AlohaChat");
     }
 
     private int port;
