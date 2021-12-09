@@ -52,7 +52,7 @@ public class AlohaUser extends Thread
             } while (!clientMessage.equals(quit_message)); // aloha means goodbye, too!
  
             // The user typed the quit message. Remove their entry from the server
-            server.removeUser(username, this);
+            server.removeUser(this);
             socket.close();
  
             serverMessage = username + " has left the AlohaChat!";
