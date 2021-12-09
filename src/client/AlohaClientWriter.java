@@ -45,6 +45,7 @@ public class AlohaClientWriter extends Thread
             // Get keyboard input from user
             final var text = console.readLine("~" + username + ": ");
             
+            // Client-side commands
             if(text.equals("/quit")) {
                 writer.println(text); // Send "/quit" so server knows you're leaving
                 break;
@@ -54,7 +55,6 @@ public class AlohaClientWriter extends Thread
                 out.println("Current commands are... /quit, /help, /online, /numOnline, /ping");
                 continue; // Don't broadcast command to others
             }
-
 
             // Send message/command to server socket
             writer.println(text);

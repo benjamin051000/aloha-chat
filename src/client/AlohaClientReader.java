@@ -35,6 +35,7 @@ public class AlohaClientReader extends Thread
         {
             try 
             {
+                // Read a message from the server socket (waits until one is sent)
                 var response = reader.readLine();
                 out.println("\n" + response);
  
@@ -43,7 +44,9 @@ public class AlohaClientReader extends Thread
                 {
                     out.print("~" + client.getusername() + ": ");
                 }
-            } catch (IOException e) 
+            } 
+            // If the write socket closes, this one will throw an exception.
+            catch (IOException e)
             {
                 out.println("Connection terminated... goodbye!");
                 break;

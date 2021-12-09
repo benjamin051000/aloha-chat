@@ -23,15 +23,17 @@ public class AlohaClient
         {
             var s = new Socket(hostname, port);
  
-            out.println("Connected to the chat server");
+            out.println("Connected to the Aloha! server");
  
             new AlohaClientReader(s, this).start();
             new AlohaClientWriter(s, this).start();
- 
-        } catch (UnknownHostException ex) 
+
+        } 
+        catch (UnknownHostException e) 
         {
-            out.println("Server not found.");
-        } catch (IOException ex) 
+            out.println("Server not found...");
+        } 
+        catch (IOException e) 
         {
             out.println("I/O Error");
         }

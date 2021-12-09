@@ -51,6 +51,8 @@ public class AlohaUser extends Thread
         }
 
         motd += "\n-----------------------------------------";
+        motd += "\nUse /help to view commands.";
+        motd += "\nUse /quit to leave AlohaChat.";
         motd += "\nAloha! Enter your name?: ";
         
         // Send message of the day to the client.
@@ -75,6 +77,7 @@ public class AlohaUser extends Thread
                 // Get a message from client
                 String clientMessage = reader.readLine();
 
+                // Server-side commands
                 if(clientMessage.equals(quit_message)) 
                 {
                     break;
