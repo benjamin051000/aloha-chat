@@ -10,11 +10,6 @@ import java.io.*;
 
 public class AlohaUser extends Thread 
 {
-    private Socket socket;
-    private AlohaServer server;
-    private PrintWriter writer;
-    public String username;
- 
     public AlohaUser(Socket socket_, AlohaServer server_) 
     {
         socket = socket_;
@@ -25,50 +20,60 @@ public class AlohaUser extends Thread
     {
         try 
         {
-            InputStream input = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            // Reads data from the client socket
+            var reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
  
-            OutputStream output = socket.getOutputStream();
-            writer = new PrintWriter(output, true);
+            // Sends data to the client socket
+            writer = new PrintWriter(socket.getOutputStream(), true);
  
-            if (server.has_users_online()) 
-                writer.println("Connected users: " + server.getUserNames());
+            // Send client number of users currently online
+            if (server.num_online() > 0) 
+                writer.println(Integer.toString(server.num_online()) +  " users online: " + server.list());
             else 
-                writer.println("No other users connected");
+                writer.println("0 users online.");
  
+            // Get username from client 
             username = reader.readLine();
-            server.add_username(this);
+            // Server registers this user as online and saves their username.
+            server.bring_user_online(this);
  
             String serverMessage;
-            // String serverMessage = "New user connected: " + username;
-            // server.broadcast(this);
- 
             String clientMessage;
- 
             do 
             {
+                // Get a message from client
                 clientMessage = reader.readLine();
-                serverMessage = "[" + username + "]: " + clientMessage;
+                // Broadcast the message to all online clients
+                serverMessage = "~" + username + ": " + clientMessage;
+                System.out.println("[Client message]: " + serverMessage);
+
                 server.broadcast(serverMessage, this);
  
-            } while (!clientMessage.equals("bye"));
+            } while (!clientMessage.equals(quit_message)); // aloha means goodbye, too!
  
+            // The user typed the quit message. Remove their entry from the server
             server.removeUser(username, this);
             socket.close();
  
-            serverMessage = username + " has quit.";
+            serverMessage = username + " has left the AlohaChat!";
             server.broadcast(serverMessage, this);
  
         } catch (IOException ex) 
         {
-            System.out.println("Error in UserThread: " + ex.getMessage());
-            ex.printStackTrace();
+            System.out.println("Error occurred with user...");
         }
     }
 
-    void sendMessage(String message) 
+    void send(String msg) 
     {
-        writer.println(message);
+        writer.println(msg);
     }
- 
+    
+    // Constant command for exiting the chat.
+    static final String quit_message = "aloha";
+    
+    private Socket socket;
+    private AlohaServer server;
+    private PrintWriter writer;
+    public String username;
 }

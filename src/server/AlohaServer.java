@@ -14,10 +14,6 @@ import java.util.ArrayList;
 
 public class AlohaServer 
 {
-    private int port;
-    private ArrayList<String> userNames = new ArrayList<>();
-    private ArrayList<AlohaUser> userThreads = new ArrayList<>();
- 
     //constructor for the class
     public AlohaServer(int port_) 
     {
@@ -35,7 +31,8 @@ public class AlohaServer
             while (true) 
             {
                 Socket s = serverSocket.accept();
-                System.out.println("New user connected.");
+
+                System.out.println("New user connected. Awaiting name...");
  
                 AlohaUser newUser = new AlohaUser(s, this);
                 userThreads.add(newUser);
@@ -43,10 +40,10 @@ public class AlohaServer
  
             }
  
-        } catch (IOException ex) 
+        } 
+        catch (IOException ex) 
         {
-            System.out.println("Error in the server: " + ex.getMessage());
-            ex.printStackTrace();
+            System.out.println("Error");
         }
     }
  
@@ -56,36 +53,35 @@ public class AlohaServer
         server.run();
     }
 
-    ArrayList<String> getUserNames() 
+    // List all online clients.
+    ArrayList<String> list() 
     {
-        
         return this.userNames;
     }
 
     //send message to users
     void broadcast(String message, AlohaUser excludeUser) 
     {
-        for (AlohaUser aUser : userThreads) 
+        for (var aUser : userThreads)
         {
             if (aUser != excludeUser) 
-            {
-                aUser.sendMessage(message);
-            }
+                aUser.send(message);
         }
     }
 
-    //new user
-    void add_username(AlohaUser user) 
+    // Add the user to the online list
+    void bring_user_online(AlohaUser user) 
     {
         userNames.add(user.username);
         // Broadcast to everyone that a new user has connected
-        final String msg = user.username + " joined.";
+        final String msg = user.username + " joined the AlohaChat!";
         broadcast(msg, user);
     }
 
-    boolean has_users_online() 
+    int num_online() 
     {
-        return this.userNames.size() > 0;
+        // Use userNames here, since you aren't "online" until you've supplied a name.
+        return this.userNames.size();
     }
  
     //delete user
@@ -95,7 +91,11 @@ public class AlohaServer
         if (removed) 
         {
             userThreads.remove(user);
-            System.out.println(userName + " left");
+            System.out.println(userName + " has left the AlohaChat");
         }
     }
+
+    private int port;
+    private ArrayList<String> userNames = new ArrayList<>();
+    private ArrayList<AlohaUser> userThreads = new ArrayList<>();
 }
