@@ -42,14 +42,14 @@ public class AlohaUser extends Thread
         
         // Send client number of users currently online
         if (server.num_online() > 0) {
-            motd += "\n" + Integer.toString(server.num_online()) +  " users online: " + server.list();
+            motd += "\n" + Integer.toString(server.num_online()) +  " user(s) online: " + server.list();
         }
         else {
             motd += "\nNo users online.";
         }
 
         motd += "\n-----------------------------------------";
-        motd += "\nEnter your username to join the chatroom: ";
+        motd += "\nAloha! Enter your name?: ";
         
         // Send message of the day to the client.
         writer.println(motd);
