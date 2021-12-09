@@ -11,10 +11,10 @@ import java.io.*;
 
 public class AlohaClient 
 {
-    public AlohaClient(String hostname, int port) 
+    public AlohaClient(String hostname_, int port_) 
     {
-        this.hostname = hostname;
-        this.port = port;
+        hostname = hostname_;
+        port = port_;
     }
  
     public void run() 
@@ -37,14 +37,14 @@ public class AlohaClient
         }
     }
  
-    void setUserName(String userName) 
+    void setusername(String username_) 
     {
-        this.userName = userName;
+        username = username_;
     }
  
-    String getUserName() 
+    String getusername() 
     {
-        return this.userName;
+        return username;
     }
  
     public static void main(String[] args) 
@@ -61,5 +61,5 @@ public class AlohaClient
 
     private String hostname;
     private int port;
-    private String userName;
+    private String username;
 }

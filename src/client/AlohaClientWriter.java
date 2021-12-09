@@ -12,63 +12,65 @@ import java.net.*;
  
 public class AlohaClientWriter extends Thread 
 {
-    public AlohaClientWriter(Socket socketObj, AlohaClient clientAloha) 
+    public AlohaClientWriter(Socket socket_, AlohaClient clientAloha) 
     {
-        this.clientAloha = clientAloha;
-        this.socketObj = socketObj;
+        client = clientAloha;
+        socket = socket_;
  
         try 
         {
-            OutputStream output = socketObj.getOutputStream();
-            writerPrinter = new PrintWriter(output, true);
+            // Writes messages from the client to the server
+            writer = new PrintWriter(socket_.getOutputStream(), true);
         } catch (IOException ex) 
         {
-            out.println("Error writing...");
+            out.println("Error creating writer thread.");
         }
     }
  
     public void run() 
     {
-        var console = System.console();
+        final var console = System.console();
  
         String username;
         do {
             username = console.readLine();
         } while(username == null || username.trim().isEmpty()); // Ensure user types something for their name
 
-        clientAloha.setUserName(username);
+        client.setusername(username);
         // Send username to server
-        writerPrinter.println(username);
+        writer.println(username);
  
         while (true)
         {
             // Get keyboard input from user
-            var text = console.readLine("~" + username + ": ");
+            final var text = console.readLine("~" + username + ": ");
             
             if(text.equals("/quit")) {
-                writerPrinter.println(text); // Send "/quit" so server knows you're leaving
+                writer.println(text); // Send "/quit" so server knows you're leaving
                 break;
             }
             else if(text.equals("/help")) 
             {
-                out.println("Current commands are... /quit, /help");
+                out.println("Current commands are... /quit, /help, /online, /numOnline, /ping");
                 continue; // Don't broadcast command to others
             }
 
-            // Send message to server socket
-            writerPrinter.println(text);
+
+            // Send message/command to server socket
+            writer.println(text);
         }
  
         try 
         {
-            socketObj.close();
-        } catch (IOException e) 
+            socket.close();
+        } 
+        catch (IOException e) 
         {
-            out.println("Error writing to server: " + e.getMessage());
+            out.println("Error writing to server.");
         }
     }
 
-    private Socket socketObj;
-    private AlohaClient clientAloha;
-    private PrintWriter writerPrinter;
+    private Socket socket;
+    private AlohaClient client;
+    private PrintWriter writer;
 }

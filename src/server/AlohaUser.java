@@ -8,6 +8,8 @@ package server;
 import java.net.Socket;
 import java.io.*;
 
+import java.util.ArrayList;
+
 import static java.lang.System.out;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
@@ -73,8 +75,39 @@ public class AlohaUser extends Thread
                 // Get a message from client
                 String clientMessage = reader.readLine();
 
-                if(clientMessage.equals(quit_message)) {
+                if(clientMessage.equals(quit_message)) 
+                {
                     break;
+                }
+                else if (clientMessage.equals("/online")) 
+                {
+                    // Send this client a message back with the online users
+                    String msg = "Users online are: ";
+
+                    ArrayList<String> userList = server.list();
+
+                    for(int i = 0; i < server.num_online(); i++)
+                    {
+                        msg += userList.get(i) + ", "; 
+                    }
+                    
+                    msg = msg.substring(0, msg.length() - 2); // Remove very last ", "
+
+                    send(msg);
+
+                    continue; // Don't broadcast the "/online" command
+                }
+                else if(clientMessage.equals("/numOnline"))
+                {
+                    String msg = "Number of users online is: ";
+                    msg += server.num_online();
+                    send(msg);
+                    continue;
+                }
+                else if(clientMessage.equals("/ping"))
+                {
+                    send("Pong!");
+                    continue; // dont broadcast command
                 }
 
                 // Append username

@@ -3,45 +3,47 @@
     John Shoemaker
     Benjamin Wheeler
 */
-
 package client;
+
 import static java.lang.System.out;
-// package net.codejava.networking.chat.client;
+
 import java.io.*;
 import java.net.*;
- 
+
+
 public class AlohaClientReader extends Thread 
 {
-    public AlohaClientReader(Socket socketObj, AlohaClient clientAloha) 
+    public AlohaClientReader(Socket socket_, AlohaClient client_) 
     {
-        this.socketObj = socketObj;
-        this.clientAloha = clientAloha;
+        socket = socket_;
+        client = client_;
  
         try 
         {
-            InputStream input = socketObj.getInputStream();
-            readerBuffer = new BufferedReader(new InputStreamReader(input));
-        } catch (IOException ex) 
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } 
+        catch (IOException e) 
         {
-            out.println("Error with reading...");
+            out.println("Error creating reader thread.");
         }
     }
  
+
     public void run() 
     {
         while (true) 
         {
             try 
             {
-                String response = readerBuffer.readLine();
+                var response = reader.readLine();
                 out.println("\n" + response);
  
                 // prints the username after displaying the server's message
-                if (clientAloha.getUserName() != null) 
+                if (client.getusername() != null) 
                 {
-                    out.print("~" + clientAloha.getUserName() + ": ");
+                    out.print("~" + client.getusername() + ": ");
                 }
-            } catch (IOException ex) 
+            } catch (IOException e) 
             {
                 out.println("Connection terminated... goodbye!");
                 break;
@@ -49,7 +51,7 @@ public class AlohaClientReader extends Thread
         }
     }
 
-    private Socket socketObj;
-    private AlohaClient clientAloha;
-    private BufferedReader readerBuffer;
+    private Socket socket;
+    private AlohaClient client;
+    private BufferedReader reader;
 }
