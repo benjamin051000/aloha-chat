@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "client.AlohaClient",
             "projectName": "aloha-chat_17715af",
-            "args": "localhost 3001"
+            "args": "localhost"
         },
         {
             "type": "java",

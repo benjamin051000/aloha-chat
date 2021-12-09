@@ -29,29 +29,42 @@ public class AlohaClientWriter extends Thread
  
     public void run() 
     {
+        var console = System.console();
  
-        Console console = System.console();
+        String username;
+        do {
+            username = console.readLine();
+        } while(username == null || username.trim().isEmpty()); // Ensure user types something for their name
+
+        clientAloha.setUserName(username);
+        // Send username to server
+        writerPrinter.println(username);
  
-        String userName = console.readLine("\nAloha! Your name?: ");
-        clientAloha.setUserName(userName);
-        writerPrinter.println(userName);
- 
-        String text;
- 
-        do 
+        while (true)
         {
-            text = console.readLine("~" + userName + ": ");
+            // Get keyboard input from user
+            var text = console.readLine("~" + username + ": ");
+            
+            if(text.equals("/quit")) {
+                writerPrinter.println(text); // Send "/quit" so server knows you're leaving
+                break;
+            }
+            else if(text.equals("/help")) 
+            {
+                out.println("Current commands are... /quit, /help");
+                continue; // Don't broadcast command to others
+            }
+
+            // Send message to server socket
             writerPrinter.println(text);
- 
-        } while (!text.equals("aloha"));
+        }
  
         try 
         {
             socketObj.close();
-        } catch (IOException ex) 
+        } catch (IOException e) 
         {
- 
-            out.println("Error writing to server: " + ex.getMessage());
+            out.println("Error writing to server: " + e.getMessage());
         }
     }
 

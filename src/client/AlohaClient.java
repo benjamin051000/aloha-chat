@@ -3,14 +3,12 @@
     John Shoemaker
     Benjamin Wheeler
 */
-
 package client;
-// package net.codejava.networking.chat.client;
- 
+
 import static java.lang.System.out;
 import java.net.*;
 import java.io.*;
- 
+
 public class AlohaClient 
 {
     public AlohaClient(String hostname, int port) 
@@ -19,25 +17,24 @@ public class AlohaClient
         this.port = port;
     }
  
-    public void execute() 
+    public void run() 
     {
-        try 
+        try
         {
-            Socket socket = new Socket(hostname, port);
+            var s = new Socket(hostname, port);
  
             out.println("Connected to the chat server");
  
-            new AlohaClientReader(socket, this).start();
-            new AlohaClientWriter(socket, this).start();
+            new AlohaClientReader(s, this).start();
+            new AlohaClientWriter(s, this).start();
  
         } catch (UnknownHostException ex) 
         {
-            out.println("Server not found: " + ex.getMessage());
+            out.println("Server not found.");
         } catch (IOException ex) 
         {
-            out.println("I/O Error: " + ex.getMessage());
+            out.println("I/O Error");
         }
- 
     }
  
     void setUserName(String userName) 
@@ -52,13 +49,14 @@ public class AlohaClient
  
     public static void main(String[] args) 
     {
-        if (args.length < 2) return;
+        if (args.length == 0) {   
+            return;
+        }
+
+        final String hostname = args[0];
  
-        String hostname = args[0];
-        int port = Integer.parseInt(args[1]);
- 
-        AlohaClient client = new AlohaClient(hostname, port);
-        client.execute();
+        var client = new AlohaClient(hostname, 3001); //hardcode the port
+        client.run();
     }
 
     private String hostname;
